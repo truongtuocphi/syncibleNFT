@@ -63,7 +63,7 @@ const Navbar = () => {
           </nav>
           <ConnectButton
             connectButton={{
-              label: "Sigining",
+              label: "Signing",
               style: {
                 color: "white",
                 background: "blue",
