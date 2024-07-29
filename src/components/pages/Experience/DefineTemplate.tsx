@@ -115,14 +115,14 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
                   type="file"
                   accept="image/jpeg, image/png"
                   onChange={handleTemplateChange}
-                  className="cursor-pointer mt-1 block w-full h-48 text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer focus:outline-none p-2"
+                  className="mt-1 block w-full h-56 text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer focus:outline-none p-2 overflow-hidden"
                 />
                 {previewImage && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <img
                       src={previewImage}
                       alt="Selected Media"
-                      className="w-full h-48 object-cover rounded-md border border-gray-300"
+                      className="w-full h-56 object-cover rounded-md border border-gray-300 cursor-pointer"
                     />
                   </div>
                 )}
