@@ -327,7 +327,7 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
             )}
           </div>
 
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-end mt-4">
             <button
               onClick={handleSubmit}
               className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
