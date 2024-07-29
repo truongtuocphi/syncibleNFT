@@ -73,6 +73,9 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
             onChange={handleTemplateChange}
             className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none p-2"
           />
+          <p className="mt-4">
+            Note: The background color of the certificate is light
+          </p>
         </label>
         {errors.template && (
           <p className="text-red-500 text-sm">{errors.template}</p>
