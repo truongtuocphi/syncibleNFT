@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import cert1 from "../../../../public/cert_1.png";
 import cert2 from "../../../../public/cert_2.png";
@@ -24,17 +22,25 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   const [headOrgPosition, setHeadOrgPosition] = useState("");
   const [headOrgSignature, setHeadOrgSignature] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showChooseTemplate, setShowChooseTemplate] = useState(false); // State to toggle visibility
 
   const handleTemplateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setTemplate(e.target.files[0]);
+      const file = e.target.files[0];
+      setTemplate(file);
       setSelectedTemplate(null); // Deselect predefined template if file is chosen
+
+      // Create a URL for the selected file and update the preview
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewImage(fileUrl);
     }
   };
 
   const handleSelectTemplate = (templateId: number) => {
     setSelectedTemplate(templateId);
     setTemplate(null); // Clear custom template if predefined template is selected
+    setPreviewImage(null); // Clear the preview image when selecting predefined template
   };
 
   const handleSignatureImageChange = (
@@ -96,168 +102,241 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
+    <div className="p-6 max-w-full mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
       <h2 className="text-2xl font-bold">Define Template</h2>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Select Media:
-          <input
-            type="file"
-            accept="image/jpeg, image/png"
-            onChange={handleTemplateChange}
-            className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none p-2"
-          />
-          <p className="mt-4">
-            Note: The background color of the certificate is light
-          </p>
-        </label>
-        {errors.template && (
-          <p className="text-red-500 text-sm">{errors.template}</p>
-        )}
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold">
-          Or Choose a Predefined Template:
-        </h3>
-        <div className="grid grid-cols-3 gap-4 mt-2">
-          {predefinedTemplates.map((template) => (
-            <div
-              key={template.id}
-              className={`cursor-pointer p-2 border rounded-lg ${
-                selectedTemplate === template.id
-                  ? "border-blue-500"
-                  : "border-gray-300"
-              }`}
-              onClick={() => handleSelectTemplate(template.id)}
+      <div className="flex space-x-6">
+        {/* Left Section */}
+        <div className="flex gap-4 space-y-4">
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700">
+              Select Media:
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  onChange={handleTemplateChange}
+                  className="cursor-pointer mt-1 block w-full h-48 text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer focus:outline-none p-2"
+                />
+                {previewImage && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src={previewImage}
+                      alt="Selected Media"
+                      className="w-full h-48 object-cover rounded-md border border-gray-300"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="mt-4">
+                Note: The background color of the certificate is light
+              </p>
+            </label>
+            {errors.template && (
+              <p className="text-red-500 text-sm">{errors.template}</p>
+            )}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold">Choose Template:</h3>
+            <button
+              onClick={() => setShowChooseTemplate(!showChooseTemplate)}
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
             >
-              <img
-                src={template.imageUrl}
-                alt={template.name}
-                className="w-full h-24 object-cover rounded-md"
+              Select template
+            </button>
+            {showChooseTemplate && (
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                {predefinedTemplates.map((template) => (
+                  <div
+                    key={template.id}
+                    className={`cursor-pointer p-2 border rounded-lg ${
+                      selectedTemplate === template.id
+                        ? "border-blue-500"
+                        : "border-gray-300"
+                    }`}
+                    onClick={() => handleSelectTemplate(template.id)}
+                  >
+                    <img
+                      src={template.imageUrl}
+                      alt={template.name}
+                      className="w-full h-24 object-cover rounded-md"
+                    />
+                    <p className="text-center mt-1">{template.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex-1 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              NFT Name:
+              <input
+                type="text"
+                value={nftName}
+                onChange={(e) => setNftName(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
               />
-              <p className="text-center mt-1">{template.name}</p>
-            </div>
-          ))}
+            </label>
+            {errors.nftName && (
+              <p className="text-red-500 text-sm">{errors.nftName}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Description:
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.description && (
+              <p className="text-red-500 text-sm">{errors.description}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Text Font:
+              <input
+                type="number"
+                value={textFont}
+                onChange={(e) => setTextFont(Number(e.target.value))}
+                defaultValue={20}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.textFont && (
+              <p className="text-red-500 text-sm">{errors.textFont}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Font chữ:
+              <input
+                type="text"
+                value={fontChuc}
+                onChange={(e) => setFontChuc(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.fontChuc && (
+              <p className="text-red-500 text-sm">{errors.fontChuc}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Signature Image:
+              <input
+                type="file"
+                accept="image/jpeg, image/png"
+                onChange={handleSignatureImageChange}
+                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer"
+              />
+            </label>
+            {errors.signatureImage && (
+              <p className="text-red-500 text-sm">{errors.signatureImage}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name:
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Certificate Number:
+              <input
+                type="text"
+                value={certificateNumber}
+                onChange={(e) => setCertificateNumber(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.certificateNumber && (
+              <p className="text-red-500 text-sm">{errors.certificateNumber}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Authorizing Organization Name:
+              <input
+                type="text"
+                value={authorizingOrgName}
+                onChange={(e) => setAuthorizingOrgName(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.authorizingOrgName && (
+              <p className="text-red-500 text-sm">
+                {errors.authorizingOrgName}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Head of Organization Name:
+              <input
+                type="text"
+                value={headOrgName}
+                onChange={(e) => setHeadOrgName(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.headOrgName && (
+              <p className="text-red-500 text-sm">{errors.headOrgName}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Head of Organization’s Position:
+              <input
+                type="text"
+                value={headOrgPosition}
+                onChange={(e) => setHeadOrgPosition(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.headOrgPosition && (
+              <p className="text-red-500 text-sm">{errors.headOrgPosition}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Head of Organization Signature:
+              <input
+                type="text"
+                value={headOrgSignature}
+                onChange={(e) => setHeadOrgSignature(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.headOrgSignature && (
+              <p className="text-red-500 text-sm">{errors.headOrgSignature}</p>
+            )}
+          </div>
+
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={handleSubmit}
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          NFT Name:
-          <input
-            type="text"
-            value={nftName}
-            onChange={(e) => setNftName(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.nftName && (
-          <p className="text-red-500 text-sm">{errors.nftName}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.description && (
-          <p className="text-red-500 text-sm">{errors.description}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Text Font:
-          <input
-            type="number"
-            value={textFont}
-            onChange={(e) => setTextFont(Number(e.target.value))}
-            defaultValue={20}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.textFont && (
-          <p className="text-red-500 text-sm">{errors.textFont}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Font chữ:
-          <input
-            type="text"
-            value={fontChuc}
-            onChange={(e) => setFontChuc(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.fontChuc && (
-          <p className="text-red-500 text-sm">{errors.fontChuc}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Authorizing Organization Name:
-          <input
-            type="text"
-            value={authorizingOrgName}
-            onChange={(e) => setAuthorizingOrgName(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.authorizingOrgName && (
-          <p className="text-red-500 text-sm">{errors.authorizingOrgName}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Head of Organization Name:
-          <input
-            type="text"
-            value={headOrgName}
-            onChange={(e) => setHeadOrgName(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.headOrgName && (
-          <p className="text-red-500 text-sm">{errors.headOrgName}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Head of Organization’s Position:
-          <input
-            type="text"
-            value={headOrgPosition}
-            onChange={(e) => setHeadOrgPosition(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-          />
-        </label>
-        {errors.headOrgPosition && (
-          <p className="text-red-500 text-sm">{errors.headOrgPosition}</p>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Signature Image:
-          <input
-            type="file"
-            accept="image/jpeg, image/png"
-            onChange={handleSignatureImageChange}
-            className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none p-2"
-          />
-        </label>
-        {errors.signatureImage && (
-          <p className="text-red-500 text-sm">{errors.signatureImage}</p>
-        )}
-      </div>
-      <button
-        onClick={handleSubmit}
-        className="mt-4 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Next
-      </button>
     </div>
   );
 };
