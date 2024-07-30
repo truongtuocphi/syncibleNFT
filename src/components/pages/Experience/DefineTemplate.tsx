@@ -13,7 +13,6 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   const [nftName, setNftName] = useState("");
   const [description, setDescription] = useState("");
   const [signatureImage, setSignatureImage] = useState<File | null>(null);
-  const [fullName, setFullName] = useState("");
   const [certificateNumber, setCertificateNumber] = useState("");
   const [textFont, setTextFont] = useState<number>(20); // Default font size set to 20
   const [fontChuc, setFontChuc] = useState("");
@@ -59,7 +58,6 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
     if (!description) newErrors.description = "Description is required.";
     if (template && !signatureImage)
       newErrors.signatureImage = "Signature image is required.";
-    if (template && !fullName) newErrors.fullName = "Full name is required.";
     if (template && !certificateNumber)
       newErrors.certificateNumber = "Certificate number is required.";
     if (template && !textFont) newErrors.textFont = "Text Font is required.";
@@ -88,7 +86,6 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
         nftName,
         description,
         signatureImage,
-        fullName,
         certificateNumber,
         textFont,
         fontChuc,
@@ -100,7 +97,6 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
       onNext(data);
     }
   };
-
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
       <h2 className="text-2xl font-bold">Define Template</h2>
@@ -233,27 +229,14 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
                 type="file"
                 accept="image/jpeg, image/png"
                 onChange={handleSignatureImageChange}
-                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer"
+                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer p-2"
               />
             </label>
             {errors.signatureImage && (
               <p className="text-red-500 text-sm">{errors.signatureImage}</p>
             )}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name:
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-              />
-            </label>
-            {errors.fullName && (
-              <p className="text-red-500 text-sm">{errors.fullName}</p>
-            )}
-          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Certificate Number:

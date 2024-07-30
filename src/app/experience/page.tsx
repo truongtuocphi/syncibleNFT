@@ -17,6 +17,7 @@ const Home = () => {
 
   const handleNextFromCreateNFT = (data: any) => {
     setCreateData(data);
+    console.log(templateData);
     setStep(2);
   };
 

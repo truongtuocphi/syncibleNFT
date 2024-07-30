@@ -60,7 +60,7 @@ const CreateNFT = ({ onNext }: { onNext: (data: any) => void }) => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
+    <div className="p-6 max-w-full mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
       <h2 className="text-2xl font-bold">Create NFT</h2>
       <div>
         <label className="block text-sm font-medium text-gray-700">
