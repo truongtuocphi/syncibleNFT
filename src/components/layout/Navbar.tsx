@@ -54,7 +54,11 @@ const Navbar = () => {
             <ul className="flex gap-5 md:gap-7 lg:gap-9 items-center">
               {Menu.map(({ title, link }) => (
                 <li key={title}>
-                  <Link href={link} className="text-base">
+                  <Link
+                    href={link}
+                    className="text-base"
+                    target={title === "Experience" ? "_blank" : "_self"}
+                  >
                     {title}
                   </Link>
                 </li>
