@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import BannerCertificate from "../../public/certificate.jpg";
 import ether from "../../public/images/ether.png";
 import polygon from "../../public/images/polygon.png";
-import Navbar from "@/components/layout/Navbar";
 
 export default function Home() {
   return (

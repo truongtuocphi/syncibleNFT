@@ -8,9 +8,9 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "thirdweb SDK + Next starter",
+  title: "TW_ENGINE_URL",
   description:
-    "Starter template for using thirdweb SDK with Next.js App router",
+    "TW_ENGINE_URL starter template for using thirdweb SDK with Next.js App router",
 };
 
 export default function RootLayout({
@@ -20,15 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} w-full min-h-screen bg-custom-image bg-cover bg-center`}
-      >
-        <ThirdwebProvider>
+      <ThirdwebProvider>
+        <body
+          className={`${inter.className} w-full min-h-screen bg-custom-image bg-cover bg-center`}
+        >
           <Navbar />
           {children}
           <Footer />
-        </ThirdwebProvider>
-      </body>
+        </body>
+      </ThirdwebProvider>
     </html>
   );
 }

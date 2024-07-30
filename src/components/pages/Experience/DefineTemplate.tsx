@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import cert1 from "../../../../public/cert_1.png";
 import cert2 from "../../../../public/cert_2.png";

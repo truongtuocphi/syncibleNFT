@@ -1,11 +1,25 @@
+"use client";
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import { ConnectButton } from "thirdweb/react";
+import { createWallet, walletConnect, inAppWallet } from "thirdweb/wallets";
 import { client } from "@/app/client";
-import { title } from "process";
+
+const wallets = [
+  createWallet("io.metamask"),
+  createWallet("com.coinbase.wallet"),
+  walletConnect(),
+  inAppWallet({
+    auth: {
+      options: ["email", "google", "apple", "facebook", "phone"],
+    },
+  }),
+  createWallet("com.trustwallet.app"),
+];
 
 const Menu = [
   { title: "About Us", link: "#about" },
@@ -66,6 +80,9 @@ const Navbar = () => {
             </ul>
           </nav>
           <ConnectButton
+            wallets={wallets}
+            theme={"dark"}
+            connectModal={{ size: "wide" }}
             connectButton={{
               label: "Signing",
               style: {
