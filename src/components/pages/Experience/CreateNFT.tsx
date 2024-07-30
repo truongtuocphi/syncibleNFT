@@ -7,7 +7,7 @@ const CreateNFT = ({ onNext }: { onNext: (data: any) => void }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [issuedDate, setIssuedDate] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [contractAddress, setContractAddress] = useState("");
+  const [contractAddress, setContractAddress] = useState(""); // Initialize with wallet address
   const [blockchain, setBlockchain] = useState<"Polygon" | "Ethereum">(
     "Polygon"
   );
@@ -126,6 +126,7 @@ const CreateNFT = ({ onNext }: { onNext: (data: any) => void }) => {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+            readOnly // Set to read-only if you don't want the user to modify it
           />
         </label>
         {errors.contractAddress && (

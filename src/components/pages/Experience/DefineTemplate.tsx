@@ -19,7 +19,7 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   const [authorizingOrgName, setAuthorizingOrgName] = useState("");
   const [headOrgName, setHeadOrgName] = useState("");
   const [headOrgPosition, setHeadOrgPosition] = useState("");
-  const [headOrgSignature, setHeadOrgSignature] = useState("");
+  const [headOrgSignature, setHeadOrgSignature] = useState<File | null>(null); // Updated type
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showChooseTemplate, setShowChooseTemplate] = useState(false); // State to toggle visibility
@@ -47,6 +47,14 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   ) => {
     if (e.target.files) {
       setSignatureImage(e.target.files[0]);
+    }
+  };
+
+  const handleHeadOrgSignatureChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files) {
+      setHeadOrgSignature(e.target.files[0]);
     }
   };
 
@@ -97,6 +105,7 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
       onNext(data);
     }
   };
+
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
       <h2 className="text-2xl font-bold">Define Template</h2>
@@ -210,7 +219,7 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Font chữ:
+              Font Chữ:
               <input
                 type="text"
                 value={fontChuc}
@@ -220,35 +229,6 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
             </label>
             {errors.fontChuc && (
               <p className="text-red-500 text-sm">{errors.fontChuc}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Signature Image:
-              <input
-                type="file"
-                accept="image/jpeg, image/png"
-                onChange={handleSignatureImageChange}
-                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer p-2"
-              />
-            </label>
-            {errors.signatureImage && (
-              <p className="text-red-500 text-sm">{errors.signatureImage}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Certificate Number:
-              <input
-                type="text"
-                value={certificateNumber}
-                onChange={(e) => setCertificateNumber(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-              />
-            </label>
-            {errors.certificateNumber && (
-              <p className="text-red-500 text-sm">{errors.certificateNumber}</p>
             )}
           </div>
           <div>
@@ -283,7 +263,7 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Head of Organization’s Position:
+              Head of Organization Position:
               <input
                 type="text"
                 value={headOrgPosition}
@@ -299,25 +279,50 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
             <label className="block text-sm font-medium text-gray-700">
               Head of Organization Signature:
               <input
-                type="text"
-                value={headOrgSignature}
-                onChange={(e) => setHeadOrgSignature(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                type="file"
+                accept="image/jpeg, image/png"
+                onChange={handleHeadOrgSignatureChange}
+                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer p-2"
               />
             </label>
             {errors.headOrgSignature && (
               <p className="text-red-500 text-sm">{errors.headOrgSignature}</p>
             )}
           </div>
-
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={handleSubmit}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            >
-              Next
-            </button>
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Signature Image:
+              <input
+                type="file"
+                accept="image/jpeg, image/png"
+                onChange={handleSignatureImageChange}
+                className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 border border-dotted border-gray-300 cursor-pointer p-2"
+              />
+            </label>
+            {errors.signatureImage && (
+              <p className="text-red-500 text-sm">{errors.signatureImage}</p>
+            )}
+          </div> */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Certificate Number:
+              <input
+                type="text"
+                value={certificateNumber}
+                onChange={(e) => setCertificateNumber(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+              />
+            </label>
+            {errors.certificateNumber && (
+              <p className="text-red-500 text-sm">{errors.certificateNumber}</p>
+            )}
           </div>
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
