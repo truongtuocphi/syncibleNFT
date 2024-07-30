@@ -7,7 +7,9 @@ const CreateNFT = ({ onNext }: { onNext: (data: any) => void }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [issuedDate, setIssuedDate] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [contractAddress, setContractAddress] = useState(""); // Initialize with wallet address
+  const [contractAddress, setContractAddress] = useState(
+    "0xe627783601f829Db3D5770733AC11e43f7df265A"
+  ); // Initialize with wallet address
   const [blockchain, setBlockchain] = useState<"Polygon" | "Ethereum">(
     "Polygon"
   );
