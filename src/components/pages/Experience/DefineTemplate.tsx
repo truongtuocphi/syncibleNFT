@@ -16,21 +16,21 @@ const DefineTemplate = ({ onNext }: { onNext: (data: any) => void }) => {
   const [description, setDescription] = useState("");
   const [signatureImage, setSignatureImage] = useState<File | null>(null);
   const [certificateNumber, setCertificateNumber] = useState("");
-  const [textFont, setTextFont] = useState<number>(20); // Default font size set to 20
+  const [textFont, setTextFont] = useState<number>(20);
   const [fontChuc, setFontChuc] = useState("");
   const [authorizingOrgName, setAuthorizingOrgName] = useState("");
   const [headOrgName, setHeadOrgName] = useState("");
   const [headOrgPosition, setHeadOrgPosition] = useState("");
-  const [headOrgSignature, setHeadOrgSignature] = useState<File | null>(null); // Updated type
+  const [headOrgSignature, setHeadOrgSignature] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [showChooseTemplate, setShowChooseTemplate] = useState(false); // State to toggle visibility
+  const [showChooseTemplate, setShowChooseTemplate] = useState(false);
 
   const handleTemplateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
       setTemplate(file);
-      setSelectedTemplate(null); // Deselect predefined template if file is chosen
+      setSelectedTemplate(null);
 
       // Create a URL for the selected file and update the preview
       const fileUrl = URL.createObjectURL(file);
